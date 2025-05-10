@@ -20,8 +20,10 @@ type DBType string
 const (
 	preparedStmtDBKey = "preparedStmt"
 
-	DBTypeMySQL    DBType = "mysql"    // 数据库类型 mysql
-	DBTypeKingBase DBType = "kingbase" // 数据库类型 人大金仓
+	DBTypeMySQL     DBType = "mysql"     // 数据库类型 mysql
+	DBTypeKingBase  DBType = "kingbase"  // 数据库类型 人大金仓
+	DBTypeSQLServer DBType = "sqlserver" // 数据库类型 sqlserver
+	DBTypeSqlite    DBType = "sqlite"    // 数据库类型 sqlite
 )
 
 // Config GORM config
