@@ -2,9 +2,10 @@ package soft_delete_test
 
 import (
 	"errors"
-	"gitee.com/fer996/jx-gorm/driver/sqlite"
-	"gitee.com/fer996/jx-gorm/gorm"
-	"gitee.com/fer996/jx-gorm/plugin/soft_delete"
+	"github.com/fangxing98/jx-gorm/driver/sqlite"
+	"github.com/fangxing98/jx-gorm/gorm"
+	"github.com/fangxing98/jx-gorm/plugin/soft_delete"
+
 	"os"
 	"path/filepath"
 	"regexp"

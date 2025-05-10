@@ -1,9 +1,9 @@
 package soft_delete
 
 import (
-	"gitee.com/fer996/jx-gorm/gorm"
-	"gitee.com/fer996/jx-gorm/gorm/clause"
-	"gitee.com/fer996/jx-gorm/gorm/schema"
+	"github.com/fangxing98/jx-gorm/gorm"
+	"github.com/fangxing98/jx-gorm/gorm/clause"
+	"github.com/fangxing98/jx-gorm/gorm/schema"
 	"reflect"
 	"strings"
 	"time"
