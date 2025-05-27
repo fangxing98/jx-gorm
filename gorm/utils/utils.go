@@ -89,7 +89,7 @@ func ToStringKey(values ...interface{}) string {
 	return strings.Join(results, "_")
 }
 
-func Contains(elems []string, elem string) bool {
+func Contains[T int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | bool | float32 | float64 | string](elems []T, elem T) bool {
 	for _, e := range elems {
 		if elem == e {
 			return true
