@@ -427,6 +427,11 @@ func (m Migrator) modifyColumn(stmt *gorm.Statement, field *schema.Field, target
 		isUncastableDefaultValue = true
 	}
 
+	// kingbase 不支持longtext类型，强行替换为text text最大长度为1G 可满足需求
+	if targetType.SQL == "longtext" {
+		targetType.SQL = "text"
+	}
+
 	if dv, _ := existingColumn.DefaultValue(); dv != "" && isUncastableDefaultValue {
 		if err := m.DB.Exec("ALTER TABLE ? ALTER COLUMN ? DROP DEFAULT", m.CurrentTable(stmt), clause.Column{Name: field.DBName}).Error; err != nil {
 			return err
