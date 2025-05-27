@@ -239,7 +239,7 @@ func (m Migrator) CreateTable(values ...interface{}) error {
 						expr.SQL = gorm.PgDBTypeMap(expr.SQL, dbName, stmt.Table)
 					}
 
-					values = append(values, clause.Column{Name: dbName})
+					values = append(values, clause.Column{Name: dbName}, expr)
 					createTableSQL += ","
 				}
 			}
