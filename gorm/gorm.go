@@ -247,6 +247,7 @@ func (db *DB) Session(config *Session) *DB {
 			Statement: db.Statement,
 			Error:     db.Error,
 			clone:     1,
+			DBType:    db.DBType,
 		}
 	)
 	if config.CreateBatchSize > 0 {

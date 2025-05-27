@@ -428,7 +428,7 @@ func (m Migrator) modifyColumn(stmt *gorm.Statement, field *schema.Field, target
 	}
 
 	// kingbase 类型处理
-	targetType.SQL = gorm.PgDBTypeMap(targetType.SQL)
+	targetType.SQL = gorm.PgDBTypeMap(targetType.SQL, field.DBName, stmt.Table)
 
 	if dv, _ := existingColumn.DefaultValue(); dv != "" && isUncastableDefaultValue {
 		if err := m.DB.Exec("ALTER TABLE ? ALTER COLUMN ? DROP DEFAULT", m.CurrentTable(stmt), clause.Column{Name: field.DBName}).Error; err != nil {

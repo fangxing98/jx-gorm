@@ -236,7 +236,7 @@ func (m Migrator) CreateTable(values ...interface{}) error {
 					// 建表时，兼容类型
 					expr := m.DB.Migrator().FullDataTypeOf(field)
 					if m.DB.DBType == gorm.DBTypeKingBase {
-						expr.SQL = gorm.PgDBTypeMap(expr.SQL)
+						expr.SQL = gorm.PgDBTypeMap(expr.SQL, dbName, stmt.Table)
 					}
 
 					values = append(values, clause.Column{Name: dbName})

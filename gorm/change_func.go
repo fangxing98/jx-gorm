@@ -63,20 +63,20 @@ PgDBTypeMap pg(kingbase)数据库类型映射
 1.不支持类型：longtext tinyint
 2.int不支持指定长度
 */
-func PgDBTypeMap(oldType string) string {
+func PgDBTypeMap(oldType, fieldsName, tableName string) string {
 
 	if oldType == "longtext" {
-		fmt.Printf("pg 模式 kingbase 不支持longtext类型，已自动转换为text类型 \n")
+		fmt.Printf("表：%s 字段：%s pg 模式 kingbase 不支持longtext类型，已自动转换为text类型 \n", tableName, fieldsName)
 		return "text"
 	}
 
 	if oldType == "tinyint" {
-		fmt.Printf("pg 模式 kingbase 不支持tinyint类型，已自动转换为int类型 \n")
+		fmt.Printf("表：%s 字段：%s pg 模式 kingbase 不支持tinyint类型，已自动转换为int类型 \n", tableName, fieldsName)
 		return "int"
 	}
 
 	if strings.HasPrefix(oldType, "int(") {
-		fmt.Printf("pg 模式 kingbase 不支持指定int长度，已自动去除 \n")
+		fmt.Printf("表：%s 字段：%s pg 模式 kingbase 不支持指定int长度，已自动去除 \n", tableName, fieldsName)
 		return "int"
 	}
 
