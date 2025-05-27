@@ -425,7 +425,7 @@ func (db *DB) DB() (*sql.DB, error) {
 
 func (db *DB) getInstance() *DB {
 	if db.clone > 0 {
-		tx := &DB{Config: db.Config, Error: db.Error}
+		tx := &DB{Config: db.Config, Error: db.Error, DBType: db.DBType}
 
 		if db.clone == 1 {
 			// clone with new statement

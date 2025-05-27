@@ -232,7 +232,14 @@ func (m Migrator) CreateTable(values ...interface{}) error {
 				if !field.IgnoreMigration {
 					createTableSQL += "? ?"
 					hasPrimaryKeyInDataType = hasPrimaryKeyInDataType || strings.Contains(strings.ToUpper(m.DataTypeOf(field)), "PRIMARY KEY")
-					values = append(values, clause.Column{Name: dbName}, m.DB.Migrator().FullDataTypeOf(field))
+
+					// 建表时，兼容类型
+					expr := m.DB.Migrator().FullDataTypeOf(field)
+					if m.DB.DBType == gorm.DBTypeKingBase {
+						expr.SQL = gorm.PgDBTypeMap(expr.SQL)
+					}
+
+					values = append(values, clause.Column{Name: dbName})
 					createTableSQL += ","
 				}
 			}

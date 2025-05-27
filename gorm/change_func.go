@@ -56,3 +56,29 @@ func (db *DB) Where(query interface{}, args ...interface{}) (tx *DB) {
 	}
 	return
 }
+
+/*
+PgDBTypeMap pg(kingbase)数据库类型映射
+
+1.不支持类型：longtext tinyint
+2.int不支持指定长度
+*/
+func PgDBTypeMap(oldType string) string {
+
+	if oldType == "longtext" {
+		fmt.Printf("pg 模式 kingbase 不支持longtext类型，已自动转换为text类型 \n")
+		return "text"
+	}
+
+	if oldType == "tinyint" {
+		fmt.Printf("pg 模式 kingbase 不支持tinyint类型，已自动转换为int类型 \n")
+		return "int"
+	}
+
+	if strings.HasPrefix(oldType, "int(") {
+		fmt.Printf("pg 模式 kingbase 不支持指定int长度，已自动去除 \n")
+		return "int"
+	}
+
+	return oldType
+}

@@ -1,3 +1,11 @@
+## kingbase 问题
+```shell
+1.不支持类型 longtext tinyint
+ longtext 替换为 text
+  tinyint 替换为 int
+2.int不支持指定长度
+```
+
 ### 获取全部tag
 ```shell
 git tag
