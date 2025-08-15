@@ -24,6 +24,7 @@ const (
 	DBTypeKingBase  DBType = "kingbase"  // 数据库类型 人大金仓
 	DBTypeSQLServer DBType = "sqlserver" // 数据库类型 sqlserver
 	DBTypeSqlite    DBType = "sqlite"    // 数据库类型 sqlite
+	DBTypePostgres  DBType = "postgres"  // 数据库类型 postgres
 )
 
 // Config GORM config
