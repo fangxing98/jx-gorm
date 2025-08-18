@@ -9,10 +9,6 @@ import (
 	"strings"
 )
 
-var (
-	pgDriverDBType = []DBType{DBTypeKingBase, DBTypePostgres} // pg驱动数据库类型
-)
-
 func (db *DB) replacePlaceholders(query string, args []interface{}) string {
 	// 分割 SQL 查询语句
 	placeholders := strings.Split(query, "?")
@@ -56,7 +52,7 @@ func (db *DB) keywordSymbolReplace(s string, all bool) string {
 
 	var symbol string
 
-	if utils.Contains(pgDriverDBType, db.DBType) {
+	if db.DBType == DBTypePostgres || db.DBType == DBTypeKingBase {
 		symbol = "\""
 	}
 
