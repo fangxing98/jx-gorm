@@ -457,14 +457,14 @@ func (db *DB) Unscoped() (tx *DB) {
 	return
 }
 
-func (db *DB) Raw(sql string, values ...interface{}) (tx *DB) {
-	tx = db.getInstance()
-	tx.Statement.SQL = strings.Builder{}
-
-	if strings.Contains(sql, "@") {
-		clause.NamedExpr{SQL: sql, Vars: values}.Build(tx.Statement)
-	} else {
-		clause.Expr{SQL: sql, Vars: values}.Build(tx.Statement)
-	}
-	return
-}
+//func (db *DB) Raw(sql string, values ...interface{}) (tx *DB) {
+//	tx = db.getInstance()
+//	tx.Statement.SQL = strings.Builder{}
+//
+//	if strings.Contains(sql, "@") {
+//		clause.NamedExpr{SQL: sql, Vars: values}.Build(tx.Statement)
+//	} else {
+//		clause.Expr{SQL: sql, Vars: values}.Build(tx.Statement)
+//	}
+//	return
+//}
