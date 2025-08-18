@@ -757,16 +757,16 @@ func (db *DB) RollbackTo(name string) *DB {
 	return db
 }
 
-// Exec executes raw sql
-func (db *DB) Exec(sql string, values ...interface{}) (tx *DB) {
-	tx = db.getInstance()
-	tx.Statement.SQL = strings.Builder{}
-
-	if strings.Contains(sql, "@") {
-		clause.NamedExpr{SQL: sql, Vars: values}.Build(tx.Statement)
-	} else {
-		clause.Expr{SQL: sql, Vars: values}.Build(tx.Statement)
-	}
-
-	return tx.callbacks.Raw().Execute(tx)
-}
+//// Exec executes raw sql
+//func (db *DB) Exec(sql string, values ...interface{}) (tx *DB) {
+//	tx = db.getInstance()
+//	tx.Statement.SQL = strings.Builder{}
+//
+//	if strings.Contains(sql, "@") {
+//		clause.NamedExpr{SQL: sql, Vars: values}.Build(tx.Statement)
+//	} else {
+//		clause.Expr{SQL: sql, Vars: values}.Build(tx.Statement)
+//	}
+//
+//	return tx.callbacks.Raw().Execute(tx)
+//}

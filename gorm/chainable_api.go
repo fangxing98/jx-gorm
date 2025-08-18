@@ -1,7 +1,6 @@
 package gorm
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 
@@ -109,69 +108,69 @@ func (db *DB) Distinct(args ...interface{}) (tx *DB) {
 //	db.Select("name", "age").Find(&users)
 //	// Select name and age of user using an array
 //	db.Select([]string{"name", "age"}).Find(&users)
-func (db *DB) Select(query interface{}, args ...interface{}) (tx *DB) {
-	tx = db.getInstance()
-
-	switch v := query.(type) {
-	case []string:
-		tx.Statement.Selects = v
-
-		for _, arg := range args {
-			switch arg := arg.(type) {
-			case string:
-				tx.Statement.Selects = append(tx.Statement.Selects, arg)
-			case []string:
-				tx.Statement.Selects = append(tx.Statement.Selects, arg...)
-			default:
-				tx.AddError(fmt.Errorf("unsupported select args %v %v", query, args))
-				return
-			}
-		}
-
-		if clause, ok := tx.Statement.Clauses["SELECT"]; ok {
-			clause.Expression = nil
-			tx.Statement.Clauses["SELECT"] = clause
-		}
-	case string:
-		if strings.Count(v, "?") >= len(args) && len(args) > 0 {
-			tx.Statement.AddClause(clause.Select{
-				Distinct:   db.Statement.Distinct,
-				Expression: clause.Expr{SQL: v, Vars: args},
-			})
-		} else if strings.Count(v, "@") > 0 && len(args) > 0 {
-			tx.Statement.AddClause(clause.Select{
-				Distinct:   db.Statement.Distinct,
-				Expression: clause.NamedExpr{SQL: v, Vars: args},
-			})
-		} else {
-			tx.Statement.Selects = []string{v}
-
-			for _, arg := range args {
-				switch arg := arg.(type) {
-				case string:
-					tx.Statement.Selects = append(tx.Statement.Selects, arg)
-				case []string:
-					tx.Statement.Selects = append(tx.Statement.Selects, arg...)
-				default:
-					tx.Statement.AddClause(clause.Select{
-						Distinct:   db.Statement.Distinct,
-						Expression: clause.Expr{SQL: v, Vars: args},
-					})
-					return
-				}
-			}
-
-			if clause, ok := tx.Statement.Clauses["SELECT"]; ok {
-				clause.Expression = nil
-				tx.Statement.Clauses["SELECT"] = clause
-			}
-		}
-	default:
-		tx.AddError(fmt.Errorf("unsupported select args %v %v", query, args))
-	}
-
-	return
-}
+//func (db *DB) Select(query interface{}, args ...interface{}) (tx *DB) {
+//	tx = db.getInstance()
+//
+//	switch v := query.(type) {
+//	case []string:
+//		tx.Statement.Selects = v
+//
+//		for _, arg := range args {
+//			switch arg := arg.(type) {
+//			case string:
+//				tx.Statement.Selects = append(tx.Statement.Selects, arg)
+//			case []string:
+//				tx.Statement.Selects = append(tx.Statement.Selects, arg...)
+//			default:
+//				tx.AddError(fmt.Errorf("unsupported select args %v %v", query, args))
+//				return
+//			}
+//		}
+//
+//		if clause, ok := tx.Statement.Clauses["SELECT"]; ok {
+//			clause.Expression = nil
+//			tx.Statement.Clauses["SELECT"] = clause
+//		}
+//	case string:
+//		if strings.Count(v, "?") >= len(args) && len(args) > 0 {
+//			tx.Statement.AddClause(clause.Select{
+//				Distinct:   db.Statement.Distinct,
+//				Expression: clause.Expr{SQL: v, Vars: args},
+//			})
+//		} else if strings.Count(v, "@") > 0 && len(args) > 0 {
+//			tx.Statement.AddClause(clause.Select{
+//				Distinct:   db.Statement.Distinct,
+//				Expression: clause.NamedExpr{SQL: v, Vars: args},
+//			})
+//		} else {
+//			tx.Statement.Selects = []string{v}
+//
+//			for _, arg := range args {
+//				switch arg := arg.(type) {
+//				case string:
+//					tx.Statement.Selects = append(tx.Statement.Selects, arg)
+//				case []string:
+//					tx.Statement.Selects = append(tx.Statement.Selects, arg...)
+//				default:
+//					tx.Statement.AddClause(clause.Select{
+//						Distinct:   db.Statement.Distinct,
+//						Expression: clause.Expr{SQL: v, Vars: args},
+//					})
+//					return
+//				}
+//			}
+//
+//			if clause, ok := tx.Statement.Clauses["SELECT"]; ok {
+//				clause.Expression = nil
+//				tx.Statement.Clauses["SELECT"] = clause
+//			}
+//		}
+//	default:
+//		tx.AddError(fmt.Errorf("unsupported select args %v %v", query, args))
+//	}
+//
+//	return
+//}
 
 // Omit specify fields that you want to ignore when creating, updating and querying
 func (db *DB) Omit(columns ...string) (tx *DB) {
@@ -280,27 +279,27 @@ func joins(db *DB, joinType clause.JoinType, query string, args ...interface{}) 
 //
 //	// Select the sum age of users with given names
 //	db.Model(&User{}).Select("name, sum(age) as total").Group("name").Find(&results)
-func (db *DB) Group(name string) (tx *DB) {
-	tx = db.getInstance()
-
-	fields := strings.FieldsFunc(name, utils.IsValidDBNameChar)
-	tx.Statement.AddClause(clause.GroupBy{
-		Columns: []clause.Column{{Name: name, Raw: len(fields) != 1}},
-	})
-	return
-}
+//func (db *DB) Group(name string) (tx *DB) {
+//	tx = db.getInstance()
+//
+//	fields := strings.FieldsFunc(name, utils.IsValidDBNameChar)
+//	tx.Statement.AddClause(clause.GroupBy{
+//		Columns: []clause.Column{{Name: name, Raw: len(fields) != 1}},
+//	})
+//	return
+//}
 
 // Having specify HAVING conditions for GROUP BY
 //
 //	// Select the sum age of users with name jinzhu
 //	db.Model(&User{}).Select("name, sum(age) as total").Group("name").Having("name = ?", "jinzhu").Find(&result)
-func (db *DB) Having(query interface{}, args ...interface{}) (tx *DB) {
-	tx = db.getInstance()
-	tx.Statement.AddClause(clause.GroupBy{
-		Having: tx.Statement.BuildCondition(query, args...),
-	})
-	return
-}
+//func (db *DB) Having(query interface{}, args ...interface{}) (tx *DB) {
+//	tx = db.getInstance()
+//	tx.Statement.AddClause(clause.GroupBy{
+//		Having: tx.Statement.BuildCondition(query, args...),
+//	})
+//	return
+//}
 
 // Order specify order when retrieving records from database
 //
@@ -310,27 +309,27 @@ func (db *DB) Having(query interface{}, args ...interface{}) (tx *DB) {
 //		{Column: clause.Column{Name: "name"}, Desc: true},
 //		{Column: clause.Column{Name: "age"}, Desc: true},
 //	}})
-func (db *DB) Order(value interface{}) (tx *DB) {
-	tx = db.getInstance()
-
-	switch v := value.(type) {
-	case clause.OrderBy:
-		tx.Statement.AddClause(v)
-	case clause.OrderByColumn:
-		tx.Statement.AddClause(clause.OrderBy{
-			Columns: []clause.OrderByColumn{v},
-		})
-	case string:
-		if v != "" {
-			tx.Statement.AddClause(clause.OrderBy{
-				Columns: []clause.OrderByColumn{{
-					Column: clause.Column{Name: v, Raw: true},
-				}},
-			})
-		}
-	}
-	return
-}
+//func (db *DB) Order(value interface{}) (tx *DB) {
+//	tx = db.getInstance()
+//
+//	switch v := value.(type) {
+//	case clause.OrderBy:
+//		tx.Statement.AddClause(v)
+//	case clause.OrderByColumn:
+//		tx.Statement.AddClause(clause.OrderBy{
+//			Columns: []clause.OrderByColumn{v},
+//		})
+//	case string:
+//		if v != "" {
+//			tx.Statement.AddClause(clause.OrderBy{
+//				Columns: []clause.OrderByColumn{{
+//					Column: clause.Column{Name: v, Raw: true},
+//				}},
+//			})
+//		}
+//	}
+//	return
+//}
 
 // Limit specify the number of records to be retrieved
 //
