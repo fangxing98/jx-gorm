@@ -66,14 +66,10 @@ func (db *DB) keywordSymbolReplace(s string, all bool) string {
 		return strings.ReplaceAll(s, "`", symbol)
 	}
 
-	if s[0] == '`' {
+	if len(s) >= 2 && s[0] == '`' && s[len(s)-1] == '`' {
 		firstStr = "`"
-		s = s[1:]
-	}
-
-	if s[len(s)-1] == '`' && len(s) >= 2 {
 		lastStr = "`"
-		s = s[:len(s)-1]
+		s = s[1 : len(s)-1]
 	}
 
 	s = strings.ReplaceAll(s, "`", symbol)
