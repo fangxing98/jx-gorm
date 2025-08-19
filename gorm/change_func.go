@@ -9,6 +9,15 @@ import (
 	"strings"
 )
 
+// IsPgDriver 是否使用PG驱动
+func (db *DB) IsPgDriver() bool {
+	if db.DBType == DBTypePostgres || db.DBType == DBTypeKingBase {
+		return true
+	}
+
+	return false
+}
+
 func (db *DB) replacePlaceholders(query string, args []interface{}) string {
 	// 分割 SQL 查询语句
 	placeholders := strings.Split(query, "?")
@@ -52,7 +61,7 @@ func (db *DB) keywordSymbolReplace(s string, all bool) string {
 
 	var symbol string
 
-	if db.DBType == DBTypePostgres || db.DBType == DBTypeKingBase {
+	if db.IsPgDriver() {
 		symbol = "\""
 	}
 
@@ -87,7 +96,7 @@ func (db *DB) keywordSymbolReplace(s string, all bool) string {
 
 func (db *DB) Group(name string) (tx *DB) {
 
-	name = db.keywordSymbolReplace(name, false)
+	name = db.keywordSymbolReplace(name, true)
 
 	tx = db.getInstance()
 
@@ -102,7 +111,7 @@ func (db *DB) Having(query interface{}, args ...interface{}) (tx *DB) {
 
 	switch v := query.(type) {
 	case string:
-		query = db.keywordSymbolReplace(v, false)
+		query = db.keywordSymbolReplace(v, true)
 	}
 	tx = db.getInstance()
 	tx.Statement.AddClause(clause.GroupBy{
@@ -122,7 +131,7 @@ func (db *DB) Order(value interface{}) (tx *DB) {
 			Columns: []clause.OrderByColumn{v},
 		})
 	case string:
-		v = db.keywordSymbolReplace(v, false)
+		v = db.keywordSymbolReplace(v, true)
 		if v != "" {
 			tx.Statement.AddClause(clause.OrderBy{
 				Columns: []clause.OrderByColumn{{
@@ -159,7 +168,7 @@ func (db *DB) Select(query interface{}, args ...interface{}) (tx *DB) {
 		}
 	case string:
 
-		v = db.keywordSymbolReplace(v, false)
+		v = db.keywordSymbolReplace(v, true)
 
 		if strings.Count(v, "?") >= len(args) && len(args) > 0 {
 			tx.Statement.AddClause(clause.Select{
@@ -205,7 +214,7 @@ func (db *DB) Where(query interface{}, args ...interface{}) (tx *DB) {
 
 	switch v := query.(type) {
 	case string:
-		query = db.keywordSymbolReplace(v, false)
+		query = db.keywordSymbolReplace(v, true)
 		if db.DBType == DBTypeKingBase {
 
 			queryStr := query.(string)
@@ -254,7 +263,7 @@ func (db *DB) Exec(sql string, values ...interface{}) (tx *DB) {
 	tx = db.getInstance()
 	tx.Statement.SQL = strings.Builder{}
 
-	sql = db.keywordSymbolReplace(sql, true)
+	sql = db.keywordSymbolReplace(sql, false)
 
 	if strings.Contains(sql, "@") {
 		clause.NamedExpr{SQL: sql, Vars: values}.Build(tx.Statement)

@@ -27,6 +27,10 @@ const (
 	DBTypePostgres  DBType = "postgres"  // 数据库类型 postgres
 )
 
+var (
+	PgDBTypeList = []DBType{DBTypePostgres, DBTypeKingBase} // pg驱动数据库类型
+)
+
 // Config GORM config
 type Config struct {
 	// GORM perform single create, update, delete operations in transactions by default to ensure database data integrity
