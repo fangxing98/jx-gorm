@@ -360,12 +360,30 @@ func PgDBTypeMap(tableName string, fieldsInfo *schema.Field) string {
 	}
 
 	/*
+		描述：bigint类型不支持指定长度
+		解决方案：自动去除长度
+	*/
+	if strings.HasPrefix(oldType, "bigint(") {
+		fmt.Printf("表：%s 字段：%s PG驱动指定bigint长度，已自动去除 \n", tableName, fieldsName)
+		return "bigint"
+	}
+
+	/*
 		描述：pg模式 int类型不支持指定长度
 		解决方案：自动去除长度
 	*/
 	if strings.HasPrefix(oldType, "int(") {
 		fmt.Printf("表：%s 字段：%s PG驱动指定int长度，已自动去除 \n", tableName, fieldsName)
 		return "int"
+	}
+
+	/*
+		描述：pg模式 不支持double类型
+		解决方案：转换成numeric
+	*/
+	if strings.HasPrefix(oldType, "double") {
+		fmt.Printf("表：%s 字段：%s PG驱动不支持double，自动转成numeric \n", tableName, fieldsName)
+		return "numeric"
 	}
 
 	return oldType
