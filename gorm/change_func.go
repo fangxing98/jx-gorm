@@ -293,7 +293,7 @@ func PgDBTypeMap(tableName string, fieldsInfo *schema.Field) string {
 		描述：默认int id无自增功能
 		解决方案：int类型主键设置为SERIAL自增
 	*/
-	if fieldsName == "id" && utils.Contains([]string{"int", "uint", "int64", "uint64"}, oldType) && fieldsInfo.PrimaryKey {
+	if fieldsName == "id" && strings.Contains(oldType, "int") && fieldsInfo.PrimaryKey {
 		return "SERIAL"
 	}
 
